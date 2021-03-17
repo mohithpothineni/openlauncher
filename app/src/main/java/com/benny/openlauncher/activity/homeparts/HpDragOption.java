@@ -187,7 +187,13 @@ public class HpDragOption {
                     _homeActivity.getDesktop().consumeLastItem();
                     _homeActivity.getDock().consumeLastItem();
                     // add the item to the database
+                    if (item._type.equals(Item.Type.GROUP)) {
+                        for (Item i  : item.getItems()) {
+                            HomeActivity._db.saveItem(i, _homeActivity.getDesktop().getCurrentItem(), Definitions.ItemPosition.Desktop);
+                        }
+                    }
                     HomeActivity._db.saveItem(item, _homeActivity.getDesktop().getCurrentItem(), Definitions.ItemPosition.Desktop);
+
                 } else {
                     Point pos = new Point();
                     _homeActivity.getDesktop().getCurrentPage().touchPosToCoordinate(pos, x, y, item._spanX, item._spanY, false);

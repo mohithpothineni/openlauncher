@@ -193,6 +193,7 @@ public final class Desktop extends ViewPager implements DesktopCallback {
 
         public void addPageLeft() {
             _desktop.getPages().add(0, getItemLayout());
+            HomeActivity._db.shiftPagesRight();
             notifyDataSetChanged();
         }
 
@@ -202,6 +203,7 @@ public final class Desktop extends ViewPager implements DesktopCallback {
         }
 
         public void removePage(int position, boolean deleteItems) {
+            int numOfPages = _desktop.getPages().size();
             if (deleteItems) {
                 for (View view : _desktop.getPages().get(position).getAllCells()) {
                     Object item = view.getTag();
@@ -210,6 +212,16 @@ public final class Desktop extends ViewPager implements DesktopCallback {
                     }
                 }
             }
+
+
+            /**
+             * shifting page numbers if the middle pages are deleted
+             */
+            if (position != numOfPages-1) {
+                HomeActivity._db.shiftPagesLeft(position);
+            }
+
+
             _desktop.getPages().remove(position);
             notifyDataSetChanged();
         }
@@ -432,7 +444,7 @@ public final class Desktop extends ViewPager implements DesktopCallback {
             // TODO see if this fixes SD card bug
             // apps that are located on SD card disappear on reboot
             // might be from this line of code so comment out for now
-            //HomeActivity._db.deleteItem(item, true);
+            HomeActivity._db.deleteItem(item, true);
             return false;
         }
         item._location = ItemPosition.Desktop;

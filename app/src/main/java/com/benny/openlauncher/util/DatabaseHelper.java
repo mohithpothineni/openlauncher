@@ -141,6 +141,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         _db.delete(TABLE_HOME, COLUMN_TIME + " = ?", new String[]{String.valueOf(item.getId())});
     }
 
+    public void shiftPagesLeft(int position) {
+        _db.execSQL("update " + TABLE_HOME + " set " + COLUMN_PAGE + "=" + COLUMN_PAGE + "-1 where " + COLUMN_PAGE + " > " + position + " and " + COLUMN_TYPE + "!=\"ACTION\"");
+    }
+
+    public void shiftPagesRight() {
+        _db.execSQL("update " + TABLE_HOME + " set " + COLUMN_PAGE + "=" + COLUMN_PAGE + "+1 where " + COLUMN_PAGE + " >=0" + " and " + COLUMN_TYPE + "!=\"ACTION\"");
+    }
+
+
     public List<List<Item>> getDesktop() {
         String SQL_QUERY_DESKTOP = SQL_QUERY + TABLE_HOME;
         Cursor cursor = _db.rawQuery(SQL_QUERY_DESKTOP, null);
